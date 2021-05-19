@@ -1,0 +1,112 @@
+import {
+  mount,
+  createLocalVue
+} from '@vue/test-utils'
+import Subject from '../pages/root/index'
+const RootPage = Subject
+
+import Vue from 'vue';
+import Vuetify from 'vuetify';
+import Vuex from 'vuex';
+
+Vue.use(Vuetify);
+Vue.use(Vuex);
+
+
+const localVue = createLocalVue()
+
+
+// function isVisible(wrapper) {
+//   if (!wrapper || !wrapper.element) {
+//     return false
+//   }
+//   const computedStyle = window.getComputedStyle(wrapper.element)
+//   return computedStyle.display !== 'none'
+// }
+
+// function mock(func) {
+//   let result = jest.fn()
+//   if (func) {
+//     result = result.mockImplementation(func)
+//   }
+//   return result
+// }
+
+describe('Root Page', () => {
+
+  let vuetify
+  let store
+
+
+  // const policies = [
+  //   {
+  //     id: 'POLICY:foo',
+  //     name: 'Foo Policy',
+  //     version: '2.0',
+  //   },
+  //   {
+  //     id: 'POLICY:bar',
+  //     name: 'Bar Policy',
+  //     version: '2.1',
+  //   },
+  // ]
+
+  // const org = {
+  //   id: 21,
+  //   name: 'fooorg'
+  // }
+
+  // const setCurrentOrg = mock()
+
+  // beforeAll(() => {
+  //   store = new Vuex.Store({
+  //     actions: {
+  //       getAsyncImages: mock(),
+  //       'orgs/getRecentUsageByCheckpoint': mock(),
+  //       'ssi/getCredentialDefinitions': mock(),
+  //       'ssi/listVerificationPolicies': mock(),
+  //     },
+  //     getters: {
+  //       'fetching': mock(() => false),
+  //       'ssi/credentialDefinitions': mock(() => []),
+  //       'ssi/verificationPolicies': mock(() => policies),
+  //       'ssi/verifyId': mock(() => 'fooverifyid'),
+  //       'users/user': mock(() => {}),
+  //       'orgs/orgError': mock(() => ''),
+  //       'orgs/orgs': mock(() => [org]),
+  //       'orgs/recentUsageByCheckpoint': mock(() => [
+  //         {
+
+  //         }
+  //       ]),
+  //     },
+  //     mutations: {
+  //       'users/setOrg': setCurrentOrg
+  //     },
+  //     state: { }
+  //   })
+  //   vuetify = new Vuetify()
+  // })
+
+
+  // function wrap({ propsData = {} } = {}) {
+  //   return mount(Subject, {
+  //     localVue,
+  //     store,
+  //     propsData,
+  //     vuetify,
+  //   })
+  // }
+
+  test(`select row sets current org`, async () => {
+    expect(true).toBe(true)
+    // let subject = wrap()
+    // let component = subject.find(`#icon-chartbar-${org.id}`)
+    // expect(component.exists()).toBe(true)
+    // expect(isVisible(component)).toBe(true)
+
+    // await component.trigger('click')
+    // expect(setCurrentOrg).toHaveBeenCalled()
+    // expect(setCurrentOrg.mock.calls[0][1]).toMatchObject(org)
+  })
+})

@@ -1,0 +1,398 @@
+import { 
+  mount,
+  createLocalVue
+} from '@vue/test-utils'
+import OrgModal from '../components/modals/org-modal'
+import RolesMenu from '../components/roles-menu'
+
+import Vue from 'vue';
+import Vuetify from 'vuetify';
+import Vuex from 'vuex';
+
+Vue.use(Vuetify);
+Vue.use(Vuex);
+
+
+const localVue = createLocalVue()
+
+function addElemWithDataAppToBody() {
+  const app = document.createElement('div');
+  app.setAttribute('data-app', true);
+  document.body.append(app);
+}
+
+addElemWithDataAppToBody()
+
+function isVisible(wrapper) {
+  if (!wrapper || !wrapper.element) {
+    return false
+  }
+  const computedStyle = window.getComputedStyle(wrapper.element)
+  return computedStyle.display !== 'none'
+}
+
+function mock(func) {
+  let result = jest.fn()
+  if (func) {
+    result = result.mockImplementation(func)
+  }
+  return result
+}
+
+describe('OrgModal', () => {
+
+  let vuetify
+  let store
+
+
+
+  const definitions = [
+    {
+      id: 'DEF:foo',
+      name: 'Foo Def',
+      version: '2.0',
+    },
+    {
+      id: 'DEF:bar',
+      name: 'Bar Def',
+      version: '2.1',
+    },
+    {
+      id: 'DEF:baz',
+      name: 'Baz Def',
+      version: '2.3',
+    },
+  ]
+
+
+  const policies = [
+    {
+      id: 'POLICY:foo',
+      name: 'Foo Policy',
+      version: '2.0',
+    },
+    {
+      id: 'POLICY:bar',
+      name: 'Bar Policy',
+      version: '2.1',
+    },
+  ]
+
+  beforeAll(() => {
+    store = new Vuex.Store({
+      actions: {
+        getAsyncImages: mock(),
+        'ssi/listVerificationPolicies': mock(),
+        'ssi/getCredentialDefinitions': mock(),
+      },
+      getters: {
+        'fetching': mock(() => false),
+        'orgs/orgError': mock(() => ''),
+        'ssi/credentialDefinitions': mock(() => definitions),
+        'ssi/verificationPolicies': mock(() => policies)
+      },
+      state: { }
+    })
+    vuetify = new Vuetify()
+  })
+
+
+  function wrap({ propsData = {} } = {}) {
+    return mount(OrgModal, { 
+      localVue,
+      store,
+      propsData,
+      vuetify,
+    })
+  }
+  
+  async function testBit(subject, bit) {
+    const {
+      id,
+      ref,
+      type,
+      exists,
+      visible,
+      value,
+      text,
+      $props,
+      match
+    } = bit
+
+    let component = null
+    if (typeof(id) !== 'undefined') {
+      component = subject.find(id)
+    }
+    if (typeof(ref) !== 'undefined') {
+      component = subject.findComponent({ ref })
+    }
+    if (typeof(type) !== 'undefined') {
+      component = subject.findComponent(type)
+    }
+
+    expect(component).toBeTruthy()
+
+    if (typeof(exists) !== 'undefined') {
+      expect(component.exists()).toEqual(exists)
+    }
+
+    if (typeof(visible) !== 'undefined') {
+      expect(isVisible(component)).toEqual(visible)
+    }
+
+    if (typeof(text) !== 'undefined') {
+      expect(component.text()).toEqual(text)
+    }
+
+    if (typeof(value) !== 'undefined') {
+      expect(component.element.value).toEqual(value)
+    }
+
+    if (typeof($props) !== 'undefined') {
+      expect(component.vm.$props).toMatchObject($props)
+    }
+
+    if (typeof(match) !== 'undefined') {
+      await match(component)
+    }
+  }
+
+
+
+  describe(`new item button opens modal`, () => {
+    const bits = [
+      {
+        id: '#editOrgCard',
+        exists: true,
+        visible: true,
+      },
+      {
+        id: '#orgError',
+        exists: true,
+        visible: true,
+        text: ''
+      },
+      {
+        id: '#orgName',
+        exists: true,
+        visible: true,
+        value: ''
+      },
+      {
+        id: '#orgEmail',
+        exists: true,
+        visible: true,
+        value: ''
+      },
+      {
+        type: RolesMenu,
+        exists: true,
+        visible: true,
+        $props: {
+          value: 'doctor'
+        }
+      },
+      {
+        id: '#orgApiKey',
+        exists: true,
+        visible: true,
+        value: ''
+      },
+      {
+        id: '#orgSubscriptionId',
+        exists: true,
+        visible: true,
+        value: ''
+      },
+      {
+        id: '#orgTenantId',
+        exists: true,
+        visible: true,
+        value: ''
+      },
+      {
+        ref: 'orgPolicy',
+        exists: true,
+        visible: true,
+        $props: {
+          value: undefined,
+        },
+        match(component) {
+          const children = component.vm.$props.items
+          expect(children.length).toEqual(policies.length)      
+        }
+      },
+      {
+        ref: 'orgDefinition',
+        exists: true,
+        visible: true,
+        $props: {
+          value: undefined,
+        },
+        match(component) {
+          const children = component.vm.$props.items
+          expect(children.length).toEqual(definitions.length)      
+        }
+      },
+    ]
+
+
+    let subject
+
+    beforeAll(async () => {
+      subject = wrap()  
+      let card = subject.find('#editOrgCard')
+      expect(card).toBeTruthy()
+      expect(card.exists()).not.toBeTruthy()
+  
+      let button = subject.get('#newOrgButton')
+      expect(isVisible(button)).toEqual(true)
+      await button.trigger('click')
+    })
+
+    afterAll(async () => {
+      // Expect button click doesn't work, since form state is not valid
+      button = subject.findComponent({ ref: 'saveButton' })
+      expect(button.exists()).toBeTruthy()
+      expect(button.vm.$props.disabled).toBeTruthy()
+      await button.trigger('click')
+
+      const { save } = subject.emitted()
+      expect(save).not.toBeTruthy()
+
+      button = subject.findComponent({ ref: 'closeButton' })
+      expect(button.exists()).toBeTruthy()
+      expect(button.vm.$props.disabled).not.toBeTruthy()
+      await button.trigger('click')
+
+      const { close } = subject.emitted()
+      expect(close).toBeTruthy()
+    })    
+
+    test.each(bits)(`test %o`, async bit => { 
+      await testBit(subject, bit)
+    })
+  })
+
+
+  describe.each(['doctor', 'verifier', 'root'])(`edit item button opens modal %s`, (role) => {
+    const org = {
+      name: 'foo org',
+      email: 'foo@email.org',
+      roles: [role],
+      config: {
+        streetcred: {
+          policyId: 'POLICY:bar',
+          definitionId: 'DEF:baz',
+        }
+      }
+    }  
+
+    let subject
+    beforeAll(async () => {
+      subject = wrap()
+      let component = subject.find('#editOrgCard')
+      expect(component).toBeTruthy()
+      expect(component.exists()).not.toBeTruthy()
+  
+      // This is how we will do it with the edit button
+      await subject.setProps({ org: Object.assign({}, org) })
+      await subject.setProps({ show: true })  
+    })
+
+    afterAll(async () => {
+      let button = subject.findComponent({ ref: 'saveButton' })
+      expect(button.exists()).toBeTruthy()
+      expect(button.vm.$props.disabled).not.toBeTruthy()
+      await button.trigger('click')
+  
+      const { close, save } = subject.emitted()
+      expect(save).toBeTruthy()
+      expect(save.length).toEqual(1)
+      expect(save[0][0]).toEqual(org)
+      expect(save[0][0]).not.toBe(org)
+  
+      expect(close).not.toBeTruthy()  
+    })
+
+    const bits = [
+      {
+        id: '#editOrgCard',
+        exists: true,
+        visible: true,
+      },
+      {
+        id: '#orgError',
+        exists: true,
+        visible: true,
+        text: ''
+      },
+      {
+        id: '#orgName',
+        exists: true,
+        visible: true,
+        value: org.name
+      },
+      {
+        id: '#orgEmail',
+        exists: true,
+        visible: true,
+        value: org.email
+      },
+      {
+        type: RolesMenu,
+        exists: true,
+        visible: true,
+        $props: {
+          value: org.roles[0]
+        }
+      },
+      {
+        id: '#orgApiKey',
+        exists: true,
+        visible: true,
+        value: org.config.streetcred.apiKey
+      },
+      {
+        id: '#orgSubscriptionId',
+        exists: true,
+        visible: true,
+        value: org.config.streetcred.subscriptionId
+      },
+      {
+        id: '#orgTenantId',
+        exists: true,
+        visible: true,
+        value: org.config.streetcred.tenantId
+      },
+      {
+        ref: 'orgPolicy',
+        exists: true,
+        visible: true,
+        $props: {
+          value: org.config.streetcred.policyId
+        },
+        match(component) {
+          const children = component.vm.$props.items
+          expect(children.length).toEqual(policies.length)      
+        }
+      },
+      {
+        ref: 'orgDefinition',
+        exists: true,
+        visible: true,
+        $props: {
+          value: org.config.streetcred.definitionId
+        },
+        match(component) {
+          const children = component.vm.$props.items
+          expect(children.length).toEqual(definitions.length)      
+        }
+      },
+    ]
+
+    test.each(bits)(`test %o`, async bit => await testBit(subject, bit))
+  })
+})
+
+

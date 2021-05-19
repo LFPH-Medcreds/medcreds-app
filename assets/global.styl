@@ -1,0 +1,285 @@
+
+body {
+  word-break: break-word;
+}
+
+.blurry-text {
+  color: white;
+  display: block;
+  font-size: 15px;
+  // letter-spacing: -1px
+  // padding: 50px
+  text-shadow: 0 0 5px black;
+  color: transparent;
+}
+
+.v-data-table__expanded .v-data-table__expanded__row, .v-data-table__expanded .v-data-table__expanded__content, tr {
+  box-shadow: unset !important;
+  border-bottom: none !important;
+  pointer: cursor;
+  // &.active
+  // background: #d2d2d2 !important
+}
+
+.v-data-table .tr, .v-navigation-drawer {
+  .active {
+    background-color: #1890ff3b !important;
+    border-bottom: none !important;
+  }
+}
+
+.transparent-background {
+  background-color: transparent !important;
+}
+
+.white-background {
+  background-color: white !important;
+}
+
+.gray-border-top {
+  border-top: 1px solid #d2d2d2 !important;
+}
+
+.gray-border-bottom {
+  border-bottom: 1px solid #d2d2d2 !important;
+}
+
+.gray-border-right {
+  border-right: 1px solid #d2d2d2 !important;
+}
+
+.wrap-text {
+  word-wrap: break-word !important;
+  white-space: normal !important;
+}
+
+.theme--light.v-table tbody tr:not(:last-child) {
+  border-bottom: none !important;
+}
+
+.theme--light.v-table tbody tr:not(:first-child) {
+  border-top: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+.v-toolbar__extension {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+.v-slide-group__prev--disabled {
+  display: hidden;
+}
+
+.ant-input, .ant-time-picker-input {
+  border: none !important;
+  border-bottom: 1px solid #999 !important;
+  border-radius: 0px !important;
+  padding-bottom: 0px !important;
+  padding-left: 0px !important;
+}
+
+.v-timeline-item {
+  .v-card {
+    transition: 500ms all !important;
+    transition-delay: 500ms all !important;
+  }
+}
+
+.v-dialog {
+  box-shadow: unset !important;
+}
+
+a {
+  text-decoration: none;
+}
+
+.nuxt-link-exact-active {
+  background-color: rgba(1, 1, 1, 0.1);
+  border-radius: 5px;
+}
+
+.v-footer {
+  height: 20px;
+  line-height: 0.9;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.1) !important;
+
+  span {
+    margin: 0 auto;
+  }
+}
+
+#doctor-phone {
+  background: url('/doctor_phone_reversed_small.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 700px;
+}
+
+#globe-background {
+  background: url('/globe-background-small.jpg');
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: -20px;
+  left: 0;
+}
+
+.mdi-alert-circle-outline {
+  // color: red !important
+}
+
+.v-text-field, .v-textarea {
+  .mdi-check {
+    color: #32855b !important;
+  }
+}
+
+// .fade-enter
+// .fade-leave-to
+// opacity: 0
+.animated {
+  transition: all 1s;
+  display: inline-block;
+}
+
+.container, .col, .col-12 {
+  padding: 0 !important;
+}
+
+.self-check-stepper-buttons {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  transition: 1s all !important;
+}
+
+.no-transition .stepper__content {
+  transition: none !important;
+}
+
+.display-7 {
+  font-size: 3.75rem;
+  font-weight: 300;
+  line-height: 3.75rem;
+  letter-spacing: -0.0083333333em !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.display-6 {
+  font-size: 3rem;
+  font-weight: 300;
+  line-height: 3rem;
+  letter-spacing: -0.0083333333em !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.headline-7 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 2rem;
+  letter-spacing: normal !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.v-navigation-drawer--bottom.v-navigation-drawer--is-mobile {
+  max-height: 80% !important;
+}
+
+.v-overlay .v-overlay-active {
+  touch-action: auto !important;
+}
+
+#slogan {
+  margin-top: 338px !important;
+}
+
+tr.active, tr.active td {
+  border-bottom: unset !important;
+  margin: 0px !important;
+
+  &:hover {
+    background-color: rgb(245, 245, 245) !important;
+  }
+}
+
+.mobile {
+  display: none !important;
+}
+
+.web {
+  display: block !important;
+}
+
+@media only screen and (max-width: 960px) {
+  .mobile {
+    display: block !important;
+  }
+
+  .web {
+    display: none !important;
+  }
+
+  h1 {
+    font-size: 25px;
+  }
+
+  .display-7 {
+    font-size: 2rem !important;
+    line-height: 2rem;
+  }
+
+  .display-6 {
+    font-size: 2.3rem;
+    line-height: 2.5rem;
+  }
+
+  #people-image {
+    max-width: 550px !important;
+  }
+
+  .headline-7 {
+    font-size: 1rem !important;
+  }
+
+  #globe-background {
+    background-position: 36% 90%;
+  }
+
+  #doctor-phone {
+    height: 500px;
+    background-position: 70% 90%;
+  }
+
+  #slogan {
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 450px !important;
+  }
+
+  .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .intercom-launcher {
+    margin-bottom: 40px !important;
+    z-index: 1 !important;
+  }
+
+  .intercom-launcher-frame {
+    margin-bottom: 40px !important;
+    z-index: 1 !important;
+  }
+
+  .intercom-lightweight-app {
+    margin-bottom: 40px !important;
+    z-index: 1 !important;
+  }
+
+  .v-dialog {
+    z-index: 2;
+  }
+}
